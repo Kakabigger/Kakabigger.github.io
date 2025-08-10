@@ -78,78 +78,33 @@
             color: #666;
         }
 
-        .education-section {
+        .video-section {
             background: white;
             border-radius: 20px;
             padding: 40px;
             margin-bottom: 30px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        .education-section h2 {
-            color: #667eea;
-            margin-bottom: 30px;
-            font-size: 2rem;
             text-align: center;
         }
 
-        .education-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+        .video-section h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2rem;
         }
 
-        .education-item {
-            background: #f8f9fa;
-            padding: 25px;
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .video-container iframe {
+            width: 100%;
+            height: 450px;
             border-radius: 15px;
-            border-left: 5px solid #667eea;
-            transition: transform 0.3s ease;
-        }
-
-        .education-item:hover {
-            transform: translateY(-5px);
-        }
-
-        .education-item h3 {
-            color: #667eea;
-            margin-bottom: 10px;
-            font-size: 1.3rem;
-        }
-
-        .education-item p {
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-
-
-        .contact-section {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        .contact-section h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 2rem;
-        }
-
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #666;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .footer {
@@ -178,14 +133,17 @@
             .container {
                 padding: 10px;
             }
+
+            .video-container iframe {
+                height: 250px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Dongdong Zhao</h1>
-            <p>Welcome to My Personal Profile</p>
+            <h1>Personal Profile</h1>
         </div>
 
         <div class="profile-section">
@@ -194,55 +152,24 @@
             </div>
             <div class="profile-info">
                 <h2>About Me</h2>
-                <p>Hello! I'm Dongdong Zhao, a passionate and creative professional.</p>
-                <p>I love learning new technologies and pursuing excellence in my field.</p>
-                <p>I believe that through continuous effort and innovation, we can create meaningful value.</p>
+                <p>Hello! I'm Dongdong Zhao , Master's in Physics at Beihang University now.</p>
+                <p>Bachelor's in Automation from BUCT.</p>
             </div>
         </div>
 
-        <div class="education-section">
-            <h2>Education</h2>
-            <div class="education-grid">
-                <div class="education-item">
-                    <h3>Master's Degree</h3>
-                    <p><strong>Major:</strong> Computer Science</p>
-                    <p><strong>University:</strong> Renowned University</p>
-                    <p><strong>Period:</strong> 2020-2022</p>
-                    <p><strong>Performance:</strong> Excellent</p>
-                </div>
-                <div class="education-item">
-                    <h3>Bachelor's Degree</h3>
-                    <p><strong>Major:</strong> Software Engineering</p>
-                    <p><strong>University:</strong> Renowned University</p>
-                    <p><strong>Period:</strong> 2016-2020</p>
-                    <p><strong>Performance:</strong> Excellent</p>
-                </div>
+        <div class="video-section">
+            <h2>Featured Video</h2>
+            <div class="video-container">
+                <iframe 
+                    src="https://www.youtube.com/embed/8lt5Iw00_Nc" 
+                    title="YouTube video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+                </iframe>
             </div>
         </div>
 
-
-
-        <div class="contact-section">
-            <h2>Contact</h2>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <span>📧</span>
-                    <span>dongdong.zhao@example.com</span>
-                </div>
-                <div class="contact-item">
-                    <span>📱</span>
-                    <span>+86 138-0000-0000</span>
-                </div>
-                <div class="contact-item">
-                    <span>📍</span>
-                    <span>China</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer">
-            <p>&copy; 2024 Dongdong Zhao. All rights reserved.</p>
-        </div>
     </div>
 </body>
 </html>
