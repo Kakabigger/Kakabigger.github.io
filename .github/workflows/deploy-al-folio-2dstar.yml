@@ -1,0 +1,118 @@
+name: Deploy al-folio 2DStar
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/deploy-al-folio-2dstar.yml"
+      - "index.html"
+      - "selfie.jpg"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout existing personal homepage
+        uses: actions/checkout@v4
+
+      - name: Checkout official al-folio source
+        uses: actions/checkout@v4
+        with:
+          repository: alshedivat/al-folio
+          ref: f2a2765c8a9413f6ec703fc02070fbe6becf1572
+          path: upstream-al-folio
+          persist-credentials: false
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3.5"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install build dependencies
+        working-directory: upstream-al-folio
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
+          python -m pip install --upgrade nbconvert
+          bundle install
+          npm ci
+
+      - name: Configure URL and site title
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          config = Path("upstream-al-folio/_config.yml")
+          contents = config.read_text(encoding="utf-8")
+          values = {
+              "title": "BUAA_YZZZ_2DStar",
+              "url": "https://kakabigger.github.io",
+              "baseurl": "/BUAA_YZZZ_2DStar",
+          }
+          for key, value in values.items():
+              contents, count = re.subn(
+                  rf"(?m)^{re.escape(key)}:[^\n]*$",
+                  f"{key}: {value}",
+                  contents,
+              )
+              if count != 1:
+                  raise RuntimeError(f"Expected exactly one {key} setting, found {count}")
+          config.write_text(contents, encoding="utf-8")
+          PY
+
+      - name: Build official al-folio
+        working-directory: upstream-al-folio
+        env:
+          JEKYLL_ENV: production
+        run: |
+          bundle exec jekyll build
+          npm install --global purgecss
+          purgecss -c purgecss.config.js
+
+      - name: Package root homepage and 2DStar site
+        run: |
+          mkdir -p public/BUAA_YZZZ_2DStar
+          cp index.html selfie.jpg public/
+          cp -a upstream-al-folio/_site/. public/BUAA_YZZZ_2DStar/
+          touch public/.nojekyll
+          test -f public/index.html
+          test -f public/BUAA_YZZZ_2DStar/index.html
+          test -f public/BUAA_YZZZ_2DStar/assets/css/main.css
+          grep -q '/BUAA_YZZZ_2DStar/assets/css/main.css' public/BUAA_YZZZ_2DStar/index.html
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: public
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
